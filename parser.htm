@@ -12,7 +12,7 @@
   let currentHeader = 'ERROR';
   // Array mit Struktur: Bereich, Teilbereich, X, Y, Z
   let matrix = [[[]]];
-
+  let defaults = [];
 
 function debug(text, level = 0) {
   switch (level) {
@@ -50,6 +50,7 @@ function csv(data) {
         break;
       case "%":
         debug("Type of Line: '" + elements[0] + "': Defaults");
+        defaults = elements;
         break;
       case ">":
         debug("Type of Line: '" + elements[0] + "': Header");
