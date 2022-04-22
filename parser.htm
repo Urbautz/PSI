@@ -30,7 +30,22 @@ function csv(data) {
   for (let i=0; i<linecount; i++) {
     debug("Next Line:" + lineprocessed);
     let elements = lines[i].split(";");
-    debug("Type of Line: " +elements[0]);
+    switch (elements[0]) { 
+      case "#":
+        debug("Type of Line: '" + elements[0] + "': Comment");
+        break;
+      case "": 
+        debug("Type of Line: '" + elements[0] + "': Data");
+        break;
+      case "%":
+        debug("Type of Line: '" + elements[0] + "': Defaults");
+        break;
+      default:
+        debug("Type of Line: '" + elements[0] + "': UNDEFINED!");
+        break;
+
+    }
+    debug("Type of Line: '" + elements[0] + "");
 
     lineprocessed += 1;
   }
