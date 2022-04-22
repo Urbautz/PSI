@@ -63,10 +63,18 @@ function csv(data) {
       case ">":
         debug("Type of Line: '" + elements[0] + "': Header");
         currentHeader = elements[1];
+        if(currentHeader = "PL") {
+          prestartBuffer.push(currentLine);
+          debug("Added PL-Header line to prestart buffer");
+         }
         debug("Set header to " + currentHeader);
         break;
       case "!":
         debug("Type of Line: '" + elements[0] + "': Lineheader: Ignore");
+        if(currentHeader = "PL") {
+          prestartBuffer.push(currentLine);
+          debug("Added PL-Header line to prestart buffer");
+        }
         break;
       default:
         debug("Type of Line: '" + elements[0] + "': UNDEFINED!", 2);
