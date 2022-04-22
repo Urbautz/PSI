@@ -21,11 +21,6 @@ function mach() {
 	result = csv(document.getElementById("input").value);
 }
 
-function readLine(line) {
-  sleep(5);
-  debug(typeof line);
-}
-
 function csv(data) {
   debug ("Starting ...");
   let lines = data.split(/\r\n|\n/);
@@ -34,7 +29,11 @@ function csv(data) {
   debug("Number of Lines: " + linecount);
   for (let i = 0; i<linecount; i++) {
     debug("Next Line:" + lineprocessed);
-    readLine(lines[i]);
+    let line = (lines[i]);
+    debug("magic");
+
+
+
     lineprocessed++;
   }
 }
