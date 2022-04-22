@@ -6,6 +6,12 @@
 <textarea id="input" width="500px"> </textarea>
 <div id="debug"></div>
 <script>
+
+  let linecount = 0;
+  // Array mit Struktur: Bereich, Teilbereich, X, Y, Z
+  let matrix = [[[]]];
+
+
 function debug(text) {
   document.getElementById("debug").innerHTML += text+"<br />";
 }
@@ -26,6 +32,8 @@ function csv(data) {
   const result = [[]]
   let lines = data.split(/\r\n|\n/);
   debug(lines.length);
+  linecount = lines.length;
+  lines.forEach(readLine);
 
   return result
 }
