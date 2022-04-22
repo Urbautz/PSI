@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<button onclick="mach()">Click me</button>
+<textarea id="input" width="500px"> </textarea>
+<div id="debug"></div>
+<script>
+function debug(text) {
+  document.getElementById("debug").innerHTML += text+"<br />";
+}
+
+function mach() {
+
+	result = csv(document.getElementById("input").value);
+
+}
+
+function readLine(line) {
+  debug("Next Line");
+  debug(line);
+}
+
+function csv(data) {
+
+  const result = [[]]
+  let lines = data.split(/\r\n|\n/);
+  debug(lines.length);
+
+  return result
+}
+
+</script>
+
+</body>
+</html>
