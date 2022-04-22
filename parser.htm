@@ -14,8 +14,17 @@
   let matrix = [[[]]];
 
 
-function debug(text) {
-  document.getElementById("debug").innerHTML += text+"<br />";
+function debug(text, level = 0) {
+  switch (level) {
+    case 0:
+      document.getElementById("debug").innerHTML += '<p class="debug">'+text+"</p>";
+      break;
+    case 1:
+      document.getElementById("debug").innerHTML += '<p class="warning">'+text+"</p>";
+      break;
+    default:
+      document.getElementById("debug").innerHTML += '<p class="error">EEEERRRROOOOORRRRRR: '+text+"</p>";
+  }
 }
 
 function mach() {
@@ -33,7 +42,7 @@ function csv(data) {
     let elements = lines[i].split(";");
     switch (elements[0]) { 
       case "#":
-        debug("Type of Line: '" + elements[0] + "': Comment");
+        debug("Type of Line: '" + elements[0] + "': Comment: Ignore");
         debug("Ignore");
         break;
       case "": 
@@ -48,10 +57,10 @@ function csv(data) {
         debug("Set header to " + currentHeader);
         break;
       case "!":
-        debug("Type of Line: '" + elements[0] + "': Lineheader");
+        debug("Type of Line: '" + elements[0] + "': Lineheader: Ignore");
         break;
       default:
-        debug("Type of Line: '" + elements[0] + "': UNDEFINED!");
+        debug("Type of Line: '" + elements[0] + "': UNDEFINED!", 2);
         break;
 
     }
