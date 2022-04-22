@@ -2,8 +2,8 @@
 <html>
 <body>
 
-<button onclick="mach()">Click me</button>
 <textarea id="input" width="500px"> </textarea>
+<button onclick="mach()">Click me</button>
 <div id="debug"></div>
 <script>
 
@@ -22,12 +22,12 @@ function mach() {
 }
 
 function readLine(line) {
-  await sleep(5);
+  sleep(5);
   debug(typeof line);
 }
 
 function csv(data) {
-
+  debug ("Starting ...");
   let lines = data.split(/\r\n|\n/);
 
   linecount = lines.length;
