@@ -47,6 +47,7 @@ function csv(data) {
         break;
       case "": 
         debug("Type of Line: '" + elements[0] + "': Data");
+        processData(elements);
         break;
       case "%":
         debug("Type of Line: '" + elements[0] + "': Defaults");
@@ -64,11 +65,25 @@ function csv(data) {
         debug("Type of Line: '" + elements[0] + "': UNDEFINED!", 2);
         break;
 
-    }
+    } // end switch
     debug("Type of Line: '" + elements[0] + "");
 
     lineprocessed += 1;
+  } // end for
+} // end function
+
+function processData(elements) {
+  switch (currentHeader) {
+    case 'BE' : 
+      debug()
+    break;
+    case 'PL' :
+    break;
+    default:
+      debug("Unknown Header: " + currentHeader,1);
+    break;
   }
+
 }
 
 </script>
