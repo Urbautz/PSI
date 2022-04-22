@@ -29,10 +29,8 @@ function csv(data) {
   debug("Number of Lines: " + linecount);
   for (let i=0; i<linecount; i++) {
     debug("Next Line:" + lineprocessed);
-    let line = lines[i];
-    debug("magic");
-
-
+    let elements = lines[i].split(";");
+    debug("Type of Line: " +elements[0]);
 
     lineprocessed += 1;
   }
