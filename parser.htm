@@ -10,6 +10,8 @@
   let linecount = 0;
   let lineprocessed = 1;
   let currentHeader = 'ERROR';
+  let currentLine = "";
+  let prestartBuffer = [];
   // Array mit Struktur: Bereich, Teilbereich, X, Y, Z
   let matrix = [[[]]];
   let defaults = [];
@@ -39,11 +41,15 @@ function csv(data) {
   debug("Number of Lines: " + linecount);
   for (let i=0; i<linecount; i++) {
     debug("Next Line:" + lineprocessed);
-    let elements = lines[i].split(";");
-    switch (elements[0]) { 
+    currentLine = lines[i];
+    if(currentHeader != "PL") { // add to prestart buffer
+       prestartBuffer.push(currentLine);
+       debug("Added line to prestart buffer");
+    }
+    let elements = currentLine.split(";");
+    switch (elements[0].trim()) { 
       case "#":
-        debug("Type of Line: '" + elements[0] + "': Comment: Ignore");
-        debug("Ignore");
+        debug("Type of Line: " + elements[0] + ": Comment: Ignore");
         break;
       case "": 
         debug("Type of Line: '" + elements[0] + "': Data");
@@ -52,6 +58,7 @@ function csv(data) {
       case "%":
         debug("Type of Line: '" + elements[0] + "': Defaults");
         defaults = elements;
+        debug("Defaults have been set.");
         break;
       case ">":
         debug("Type of Line: '" + elements[0] + "': Header");
@@ -66,7 +73,6 @@ function csv(data) {
         break;
 
     } // end switch
-    debug("Type of Line: '" + elements[0] + "");
 
     lineprocessed += 1;
   } // end for
@@ -75,7 +81,9 @@ function csv(data) {
 function processData(elements) {
   switch (currentHeader) {
     case 'BE' : 
-      debug("Bereiche",0);
+      debug("Start Bereiche",0);
+
+
     break;
     case 'PL' :
     break;
