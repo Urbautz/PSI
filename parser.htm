@@ -16,18 +16,13 @@
 function debug(text) {
   document.getElementById("debug").innerHTML += text+"<br />";
 }
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
-}
 
 function mach() {
 	result = csv(document.getElementById("input").value);
 }
 
 function readLine(line) {
-  debug("do stuff");
+  await sleep(5);
   debug(typeof line);
 }
 
