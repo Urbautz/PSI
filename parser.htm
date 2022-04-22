@@ -32,13 +32,12 @@ function readLine(line) {
 
 function csv(data) {
 
-  const result = [[]]
   let lines = data.split(/\r\n|\n/);
   debug(lines.length);
   linecount = lines.length;
-  asyncforEach(lines, readLine);
-
-  return result
+  for (let index = 0; index < linecount; index++) {
+    readLine(lines[index]);
+  }
 }
 
 </script>
