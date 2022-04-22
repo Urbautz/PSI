@@ -9,6 +9,7 @@
 
   let linecount = 0;
   let lineprocessed = 1;
+  let currentHeader = 'ERROR';
   // Array mit Struktur: Bereich, Teilbereich, X, Y, Z
   let matrix = [[[]]];
 
@@ -33,12 +34,21 @@ function csv(data) {
     switch (elements[0]) { 
       case "#":
         debug("Type of Line: '" + elements[0] + "': Comment");
+        debug("Ignore"");
         break;
       case "": 
         debug("Type of Line: '" + elements[0] + "': Data");
         break;
       case "%":
         debug("Type of Line: '" + elements[0] + "': Defaults");
+        break;
+      case ">":
+        debug("Type of Line: '" + elements[0] + "': Header");
+        currentHeader = elements[1];
+        debug("Set header to " + currentHeader);
+        break;
+      case "!":
+        debug("Type of Line: '" + elements[0] + "': Lineheader");
         break;
       default:
         debug("Type of Line: '" + elements[0] + "': UNDEFINED!");
