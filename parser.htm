@@ -89,11 +89,13 @@ function csv(data) {
 function processData(elements) {
   switch (currentHeader) {
     case 'BE' : 
-      debug("Start Bereiche",0);
+      debug("Processing Bereiche",0);
 
 
     break;
     case 'PL' :
+    debug("Processing Plätze ",0);
+
     break;
     default:
       debug("Unknown Header: " + currentHeader,1);
