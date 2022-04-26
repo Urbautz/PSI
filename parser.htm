@@ -10,12 +10,23 @@
   let linecount = 0;
   let lineprocessed = 1;
   let currentHeader = 'ERROR';
+  let currentLine = "";
+  let prestartBuffer = [];
   // Array mit Struktur: Bereich, Teilbereich, X, Y, Z
   let matrix = [[[]]];
+  let defaults = [];
 
-
-function debug(text) {
-  document.getElementById("debug").innerHTML += text+"<br />";
+function debug(text, level = 0) {
+  switch (level) {
+    case 0:
+      document.getElementById("debug").innerHTML += '<p class="debug">'+text+"</p>";
+      break;
+    case 1:
+      document.getElementById("debug").innerHTML += '<p class="warning">'+text+"</p>";
+      break;
+    default:
+      document.getElementById("debug").innerHTML += '<p class="error">EEEERRRROOOOORRRRRR: '+text+"</p>";
+  }
 }
 
 function mach() {
@@ -30,53 +41,68 @@ function csv(data) {
   debug("Number of Lines: " + linecount);
   for (let i=0; i<linecount; i++) {
     debug("Next Line:" + lineprocessed);
-    let elements = lines[i].split(";");
-    switch (elements[0]) { 
+    currentLine = lines[i];
+    if(currentHeader != "PL") { // add to prestart buffer
+       prestartBuffer.push(currentLine);
+       debug("Added line to prestart buffer");
+    }
+    let elements = currentLine.split(";");
+    switch (elements[0].trim()) { 
       case "#":
-        debug("Type of Line: '" + elements[0] + "': Comment");
-        debug("Ignore");
+        debug("Type of Line: " + elements[0] + ": Comment: Ignore");
         break;
       case "": 
         debug("Type of Line: '" + elements[0] + "': Data");
+        processData(elements);
         break;
       case "%":
         debug("Type of Line: '" + elements[0] + "': Defaults");
+        defaults = elements;
+        debug("Defaults have been set.");
         break;
       case ">":
         debug("Type of Line: '" + elements[0] + "': Header");
         currentHeader = elements[1];
+        if(currentHeader = "PL") {
+          prestartBuffer.push(currentLine);
+          debug("Added PL-Header line to prestart buffer");
+         }
         debug("Set header to " + currentHeader);
         break;
       case "!":
-        debug("Type of Line: '" + elements[0] + "': Lineheader");
+        debug("Type of Line: '" + elements[0] + "': Lineheader: Ignore");
+        if(currentHeader = "PL") {
+          prestartBuffer.push(currentLine);
+          debug("Added PL-Header line to prestart buffer");
+        }
         break;
       default:
-        debug("Type of Line: '" + elements[0] + "': UNDEFINED!");
+        debug("Type of Line: '" + elements[0] + "': UNDEFINED!", 2);
         break;
 
-    }
-    debug("Type of Line: '" + elements[0] + "");
+    } // end switch
 
     lineprocessed += 1;
+  } // end for
+} // end function
+
+function processData(elements) {
+  switch (currentHeader) {
+    case 'BE' : 
+      debug("Start Bereiche",0);
+
+
+    break;
+    case 'PL' :
+    break;
+    default:
+      debug("Unknown Header: " + currentHeader,1);
+    break;
   }
+
 }
 
 </script>
 
 </body>
 </html>
-
-    © 2022 GitHub, Inc.
-
-    Terms
-    Privacy
-    Security
-    Status
-    Docs
-    Contact GitHub
-    Pricing
-    API
-    Training
-    Blog
-    About
-
