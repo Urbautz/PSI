@@ -5,13 +5,44 @@
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-alpine.css">
     <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+    <style>
+      body {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .inout {
+        margin: 1rem;
+        padding: 2rem 2rem;
+        text-align: center;
+        height: 100px;
+      }
+      .top {
+        display: inline-block;
+        padding: 1rem 1rem;
+        vertical-align: middle;
+        height: 99px;
+        overflow-x: auto;
+      }
 
-  </head>
+    #debug {
+      width:200px;
+      max-width: 200px;
+      font-size:6px;
+      
+    }
+  </style>
+</head>
 
 <body>
-<textarea id="input" width="500px"> </textarea>
-<button onclick="mach()">Click me</button>
-<div id="debug"></div>
+<div id="inout">
+  <div id="in" class="top">
+    <textarea id="input" rows="4" cols="40"> </textarea><br />
+    <button onclick="mach()">Click me</button>
+  </div>
+  <div id="debug" class="top"></div>
+  <div id="out" class="top">
+    <textarea id="output" rows="4" cols="60"> </textarea>
+  </div>
+</main>
 
 <script>
 
@@ -21,11 +52,11 @@
   // Array mit Struktur: Bereich, Teilbereich, X, Y, Z
   let matrix = [[[]]];
 
-  function debug(text, level = 0) {
+function debug(text, level = 0) {
     console.log(text);
   switch (level) {
     case 0:
-      document.getElementById("debug").innerHTML += '<p class="debug">'+text+"</p>";
+      document.getElementById("debug").innerHTML += '<p class="hint">'+text+"</p>";
       break;
     case 1:
       document.getElementById("debug").innerHTML += '<p class="warning">'+text+"</p>";
@@ -33,9 +64,14 @@
     default:
       document.getElementById("debug").innerHTML += '<p class="error">EEEERRRROOOOORRRRRR: '+text+"</p>";
   }
+  document.getElementById("debug").scrollBy(0, 100);
 }
 
 function mach() {
+  linecount = 0;
+  lineprocessed = 1;
+  currentHeader = 'NONE'
+  matrix.length = 0;
 	result = csv(document.getElementById("input").value);
 }
 
