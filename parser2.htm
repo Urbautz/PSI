@@ -9,13 +9,21 @@
 
   let linecount = 0;
   let lineprocessed = 1;
-  let currentHeader = 'ERROR';
+  let currentHeader = 'NONE';
   // Array mit Struktur: Bereich, Teilbereich, X, Y, Z
   let matrix = [[[]]];
 
-
-function debug(text) {
-  document.getElementById("debug").innerHTML += text+"<br />";
+  function debug(text, level = 0) {
+  switch (level) {
+    case 0:
+      document.getElementById("debug").innerHTML += '<p class="debug">'+text+"</p>";
+      break;
+    case 1:
+      document.getElementById("debug").innerHTML += '<p class="warning">'+text+"</p>";
+      break;
+    default:
+      document.getElementById("debug").innerHTML += '<p class="error">EEEERRRROOOOORRRRRR: '+text+"</p>";
+  }
 }
 
 function mach() {
