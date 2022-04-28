@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html>
-<body>
+  <head>
 
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-alpine.css">
+    <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+
+  </head>
+
+<body>
 <textarea id="input" width="500px"> </textarea>
 <button onclick="mach()">Click me</button>
 <div id="debug"></div>
+
 <script>
 
   let linecount = 0;
@@ -14,6 +22,7 @@
   let matrix = [[[]]];
 
   function debug(text, level = 0) {
+    console.log(text);
   switch (level) {
     case 0:
       document.getElementById("debug").innerHTML += '<p class="debug">'+text+"</p>";
