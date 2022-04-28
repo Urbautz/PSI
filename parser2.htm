@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<textarea id="input" width="500px"> </textarea>
+<button onclick="mach()">Click me</button>
+<div id="debug"></div>
+<script>
+
+  let linecount = 0;
+  let lineprocessed = 1;
+  let currentHeader = 'ERROR';
+  // Array mit Struktur: Bereich, Teilbereich, X, Y, Z
+  let matrix = [[[]]];
+
+
+function debug(text) {
+  document.getElementById("debug").innerHTML += text+"<br />";
+}
+
+function mach() {
+	result = csv(document.getElementById("input").value);
+}
+
+function csv(data) {
+  debug ("Starting ...");
+  let lines = data.split(/\r\n|\n/);
+
+  linecount = lines.length;
+  debug("Number of Lines: " + linecount);
+  for (let i=0; i<linecount; i++) {
+    debug("Next Line:" + lineprocessed);
+    let elements = lines[i].split(";");
+    switch (elements[0]) { 
+      case "#":
+        debug("Type of Line: '" + elements[0] + "': Comment");
+        debug("Ignore");
+        break;
+      case "": 
+        debug("Type of Line: '" + elements[0] + "': Data");
+        break;
+      case "%":
+        debug("Type of Line: '" + elements[0] + "': Defaults");
+        break;
+      case ">":
+        debug("Type of Line: '" + elements[0] + "': Header");
+        currentHeader = elements[1];
+        debug("Set header to " + currentHeader);
+        break;
+      case "!":
+        debug("Type of Line: '" + elements[0] + "': Lineheader");
+        break;
+      default:
+        debug("Type of Line: '" + elements[0] + "': UNDEFINED!");
+        break;
+
+    }
+    debug("Type of Line: '" + elements[0] + "");
+
+    lineprocessed += 1;
+  }
+}
+
+</script>
+
+</body>
+</html>
