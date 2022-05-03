@@ -122,14 +122,14 @@
   let lineprocessed = 1;
   let currentHeader = 'NONE';
   /* Array mit Struktur: 
-  Header
-   --> head -> col1,col2
-   --> data
-       -> rownum -> col1,col2
-  
+   Tabelle 
+     -> Zeile [Spaltenarray]
   */
-  let matrix = [[[]]];
-  let starting_buffer = [[]];
+  let data = [[]];
+  let header = [[]];
+  let matrix = []; // Zeile -> Data/Header/Other
+  let other = []; // Zeile -> Komplette Zeile
+  let comment_buffer = []; // Zeile -> Komplette Zeile
 
 function debug(text, level = 0) {
     console.log(text);
@@ -166,16 +166,18 @@ function csv_read(data) {
     let elements = lines[i].split(";");
     switch (elements[0]) { 
       case "#":
+        // Kommentar
         debug("Type of Line: '" + elements[0] + "': Comment");
-        comment_buffer[i] = lines[i];
+        comment_buffer[i] = elements;
         break;
+
       case "": 
+        // Data
         debug("Type of Line: '" + elements[0] + "': Data");
 
-        matrix[currentHeader][i] = elements;
-        matrix[currentHeader].push(comment_buffer);
-        comment_buffer.length = 0;
+        if()
         break;
+
       case "%":
         debug("Type of Line: '" + elements[0] + "': Defaults");
         matrix[currentHeader][i] = elements;
