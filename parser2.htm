@@ -110,26 +110,25 @@
     </textarea><br />
     <button onclick="mach()">Click me</button>
   </div>
-  <div id="debug" class="top"></div>
+  <div id="debug" class="top">
+
+  </div>
   <div id="out" class="top">
     <textarea id="output" rows="4" cols="60"> </textarea>
   </div>
-</main>
-
+</div>
 <script>
 
   let linecount = 0;
   let lineprocessed = 1;
-  let currentHeader = 'NONE';
-  /* Array mit Struktur: 
-   Tabelle 
-     -> Zeile [Spaltenarray]
-  */
-  let data = [[]];
-  let header = [[]];
-  let matrix = []; // Zeile -> Data/Header/Other
-  let other = []; // Zeile -> Komplette Zeile
-  let comment_buffer = []; // Zeile -> Komplette Zeile
+  let currentTable = 'NONE';
+
+  // Überschrift -> Zeilennummer -> Elemente
+  let matrix = [[[]]];
+  // Überschrift -> Zeilennummer -> Header
+  let header = [[[]]];  
+  let pre = [];
+  let total = []; // Zeilennummer -> header/pre/matrix[type]
 
 function debug(text, level = 0) {
     console.log(text);
@@ -149,7 +148,7 @@ function debug(text, level = 0) {
 function mach() {
   linecount = 0;
   lineprocessed = 1;
-  currentHeader = 'NONE'
+  currentTable = 'NONE'
   matrix.length = 0;
 
 	result = csv_read(document.getElementById("input").value.trim());
@@ -164,56 +163,54 @@ function csv_read(data) {
   for (let i=0; i<linecount; i++) {
     debug("Next Line:" + lineprocessed);
     let elements = lines[i].split(";");
+
     switch (elements[0]) { 
-      case "#":
-        // Kommentar
+
+      case "#": // Comment
         debug("Type of Line: '" + elements[0] + "': Comment");
-        comment_buffer[i] = elements;
-        break;
-
-      case "": 
-        // Data
-        debug("Type of Line: '" + elements[0] + "': Data");
-
-        if()
-        break;
-
-      case "%":
-        debug("Type of Line: '" + elements[0] + "': Defaults");
-        matrix[currentHeader][i] = elements;
-        matrix[currentHeader].push(comment_buffer);
-        comment_buffer.length = 0;
-        break;
-
-      case ">":
-        debug("Type of Line: '" + elements[0] + "': Header");
-        if(currentHeader = 'NONE') { // comment to starting buffer
-            debug("Set Starting Buffer");
-            starting_buffer = comment_buffer;
-            comment_buffer.length = 0;
-        } else { // comment to last data element
-          matrix[currentHeader].push(comment_buffer);
-          comment_buffer.length = 0;
+        if(currentTable == 'NONE') 
+        {
+          pre[i] = elements;
+          total[i] = 'pre'
+        } else {
+          matrix[currentTable][i] = elements;
+          total[i] = currentTable;
         }
-        xxxx wohin schreiben
-        currentHeader = elements[1];
-        debug("Set header to " + currentHeader);
+        break;
+
+      case "": //Data 
+        debug("Type of Line: '" + elements[0] + "': Data");
+        matrix[currentTable][i] = elements;
+        total[i] = currentTable;
+        break;
+
+      case "%": // Default-Values
+        debug("Type of Line: '" + elements[0] + "': Defaults");
+        matrix[currentTable][i] = elements;
+        total[i] = currentTable;
+        break;
+
+      case ">": // Table
+        debug("Type of Line: '" + elements[0] + "': Table");
+        currentTable = elements[1];
+        debug("Set Table to " + currentTable);
+        pre[i] = elements;
+        total[i] = 'pre';
 
         break;
 
       case "!":
         debug("Type of Line: '" + elements[0] + "': Lineheader");
-        if (comment_buffer.length > 0) {
-           xxx was mach ich hier?
-        } 
-        matrix[currentHeader][i] = elements;
+        header[currentTable][i] = elements;
+        total[i] = currentTable;
         break;
+        break;
+     
       default:
         debug("Type of Line: '" + elements[0] + "': UNDEFINED!");
         break;
 
     }
-    debug("Type of Line: '" + elements[0] + "");
 
     lineprocessed += 1;
   }
