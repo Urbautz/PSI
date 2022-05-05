@@ -125,7 +125,6 @@
   let linecount = 0;
   let lineprocessed = 1;
   let currentTable = 'NONE';
-
   // Überschrift -> Zeilennummer -> Elemente
   let matrix = [];
   // Überschrift -> Zeilennummer -> Header
@@ -133,6 +132,7 @@
   let tables = [];
   let pre = [];
   let total = []; // Zeilennummer -> table/pre/matrix[type]
+  let precolumncomment = [];
 
 function debug(text, level = 0) {
     console.log(text);
@@ -158,22 +158,27 @@ function mach() {
   header.length = 0;
   pre.length = 0;
   total.length = 0;
+  document.getElementById("select").innerHTML = "";
   // read
 	result = csv_read(document.getElementById("input").value.trim());
   // Add Buttons per Headline
-
+  tables.forEach(element => {
+    debug('Add line for '+ element[1]);
+    document.getElementById("select").innerHTML += '<button onclick="showtable(\''+element[1]+'\')">'+element[2]+"</button>";
+  }
+  );
 }
 
 function csv_read(data) {
+
   debug ("Starting ...");
   let lines = data.split(/\r\n|\n/);
-
   linecount = lines.length;
   debug("Number of Lines: " + linecount);
   for (let i=0; i<linecount; i++) {
     debug("Next Line:" + lineprocessed);
     let elements = lines[i].split(";");
-
+    let buf = [];
     switch (elements[0]) { 
 
       case "#": // Comment
@@ -182,45 +187,55 @@ function csv_read(data) {
         {
           pre[i] = elements;
           total[i] = 'pre'
+          break;
         } else {
           if(!matrix.includes(currentTable)) {
             matrix[currentTable] = [];
           }
-
-          matrix[currentTable][i] = elements;
-          total[i] = currentTable;
+          hier erstmal puffern, und dann wenn column header kommt einfügen
+         // matrix[currentTable][i] = elements;
+         //total[i] = currentTable;
         }
-        break;
-
+        //break;
+        
+      case "%": // Default-Values
+        debug("Type of Line: '" + elements[0] + "': Defaults, like data");  
       case "": //Data 
         debug("Type of Line: '" + elements[0] + "': Data");
-        matrix[currentTable][i] = elements;
+        buf = [];
+        let col = 0;
+        elements.forEach(element => {
+          
+          if(element != "" || col == 0) {
+            buf[header[currentTable].find(x=>x!==undefined)[col].field] =  element ;
+            col++;
+          }
+        } )
+        matrix[currentTable][i] = buf;
         total[i] = currentTable;
-        break;
+      break;
 
-      case "%": // Default-Values
-        debug("Type of Line: '" + elements[0] + "': Defaults");
-        matrix[currentTable][i] = elements;
-        total[i] = currentTable;
-        break;
-
-      case ">": // Table
+      case ">": // Tables
         debug("Type of Line: '" + elements[0] + "': Table");
         currentTable = elements[1];
         debug("Set Table to " + currentTable);
-        table[i] = elements;
+        tables[i] = elements;
         total[i] = 'table';
 
         break;
 
-      case "!":
+      case "!": // Columnheader
         debug("Type of Line: '" + elements[0] + "': Lineheader");
         if(!header.includes(currentTable)) {
             header[currentTable] = [];
         }
-        header[currentTable][i] = elements;
+        let buffer = [];
+        elements.forEach(element => {
+          if(element != "") 
+          buffer.push( {'field' : element} );
+        } )
+        header[currentTable][i] = buffer;
         total[i] = currentTable;
-        break;
         break;
      
       default:
@@ -233,6 +248,12 @@ function csv_read(data) {
   }
 }
 
+function showtable(tablename) {
+  
+  debug("Drawing table for "+tablename);
+  let columns = header[tablename].find(x=>x!==undefined);
+  debug("Headers defined");
+}
 </script>
 
 </body>
