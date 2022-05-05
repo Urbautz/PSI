@@ -117,6 +117,9 @@
     <textarea id="output" rows="4" cols="60"> </textarea>
   </div>
 </div>
+<div id="select">
+
+</div>
 <script>
 
   let linecount = 0;
@@ -124,11 +127,12 @@
   let currentTable = 'NONE';
 
   // Überschrift -> Zeilennummer -> Elemente
-  let matrix = [[[]]];
+  let matrix = [];
   // Überschrift -> Zeilennummer -> Header
-  let header = [[[]]];  
+  let header = [];  
+  let tables = [];
   let pre = [];
-  let total = []; // Zeilennummer -> header/pre/matrix[type]
+  let total = []; // Zeilennummer -> table/pre/matrix[type]
 
 function debug(text, level = 0) {
     console.log(text);
@@ -146,12 +150,18 @@ function debug(text, level = 0) {
 }
 
 function mach() {
+  // Reset variables
   linecount = 0;
   lineprocessed = 1;
   currentTable = 'NONE'
   matrix.length = 0;
-
+  header.length = 0;
+  pre.length = 0;
+  total.length = 0;
+  // read
 	result = csv_read(document.getElementById("input").value.trim());
+  // Add Buttons per Headline
+
 }
 
 function csv_read(data) {
@@ -173,6 +183,10 @@ function csv_read(data) {
           pre[i] = elements;
           total[i] = 'pre'
         } else {
+          if(!matrix.includes(currentTable)) {
+            matrix[currentTable] = [];
+          }
+
           matrix[currentTable][i] = elements;
           total[i] = currentTable;
         }
@@ -194,13 +208,16 @@ function csv_read(data) {
         debug("Type of Line: '" + elements[0] + "': Table");
         currentTable = elements[1];
         debug("Set Table to " + currentTable);
-        pre[i] = elements;
-        total[i] = 'pre';
+        table[i] = elements;
+        total[i] = 'table';
 
         break;
 
       case "!":
         debug("Type of Line: '" + elements[0] + "': Lineheader");
+        if(!header.includes(currentTable)) {
+            header[currentTable] = [];
+        }
         header[currentTable][i] = elements;
         total[i] = currentTable;
         break;
